@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <title>Graph Results</title>
+    <title>Relasi BaraBatu</title>
 
     <!-- Add Popoto default CSS styles -->
     <link rel="stylesheet" href="popoto.min.css">
@@ -98,6 +98,16 @@
                     });
             }            
         },
+        "COUNTRY": {
+            "returnAttributes": ["name"],
+            "constraintAttribute": "name",
+            "displayResults": function (pResultElmt) {
+                pResultElmt.append("h3")
+                    .text(function (result) {
+                        return result.attributes.name;
+                    });
+            }            
+        },        
         "NPWP": {
             "returnAttributes": ["nomor"],
             "constraintAttribute": "nomor",
