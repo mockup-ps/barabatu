@@ -94,7 +94,7 @@
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
-                        return result.attributes.name;
+                        return result.attributes.nama;
                     });
             }            
         },
@@ -104,18 +104,18 @@
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
-                        return result.attributes.name;
+                        return result.attributes.nama;
                     });
             }            
         },        
         "TRANSAKSI": {
-            "returnAttributes": ["nomor"],
-            "constraintAttribute": "nomor",
+            "returnAttributes": ["ntpn"],
+            "constraintAttribute": "ntpn",
             // Customize result display for Person nodes:
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
-                        return result.attributes.nomor;
+                        return result.attributes.ntpn;
                     });
             }
         }       
