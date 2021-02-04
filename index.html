@@ -88,7 +88,7 @@
     // Define the list of label provider to customize the graph behavior:
     // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
     popoto.provider.node.Provider = {
-        "SHIPPER": {
+        "BUYER": {
             "returnAttributes": ["name"],
             "constraintAttribute": "name",
             "displayResults": function (pResultElmt) {
@@ -98,7 +98,7 @@
                     });
             }            
         },
-        "COUNTRY": {
+        "SELLER": {
             "returnAttributes": ["name"],
             "constraintAttribute": "name",
             "displayResults": function (pResultElmt) {
@@ -108,7 +108,7 @@
                     });
             }            
         },        
-        "NPWP": {
+        "TRANSAKSI": {
             "returnAttributes": ["nomor"],
             "constraintAttribute": "nomor",
             // Customize result display for Person nodes:
@@ -118,23 +118,7 @@
                         return result.attributes.nomor;
                     });
             }
-        },
-        "CONSIGNEE": {
-            "returnAttributes": ["name", "country"],
-            "constraintAttribute": "name",
-            "displayResults": function (pResultElmt) {
-                pResultElmt.append("h3")
-                    .text(function (result) {
-                        return result.attributes.name;
-                    });
-                pResultElmt.filter(function (result) {
-                    // Filter on attribute having born attribute value
-                    return result.attributes.born;
-                }).append("span").text(function (result) {
-                    return "Country: " + result.attributes.country;
-                });
-            }            
-        }        
+        }       
     };
 
     // Change the number of displayed results:
@@ -179,14 +163,14 @@
                     arrows: 'to'
                 },
                 groups: {
-                    "SHIPPER": {
+                    "BUYER": {
                         color: {background: '#68BDF6', border: '#5CA8DB'}
                     },
-                    "NPWP": {
+                    "SELLER": {
                         color: {background: '#FF756E', border: '#E06760'}
                     },
-                    "CONSIGNEE": {
-                        color: {background: '#FF756E', border: '#E06760'}
+                    "TRANSAKSI": {
+                        color: {background: '#03fcf4', border: '#E06760'}
                     }                    
                 }
             };
@@ -202,12 +186,10 @@
         nodes.forEach(function (node) {
             var nodeLabel = node.labels[0];
             var jos = "";
-            if (nodeLabel === "SHIPPER"){
-                jos = node.properties["name"]
-            } else if (nodeLabel === "NPWP"){
-                jos = jos = node.properties["nomor"]
-            } else {
-                jos = jos = node.properties["name"]
+            if (nodeLabel === "TRANSAKSI"){
+                jos = node.properties["ntpn"]
+            }  else {
+                jos = jos = node.properties["nama"]
             }
             convertedNodes.push({
                 id: node.id,
@@ -235,7 +217,7 @@
 
     // Start the generation using parameter as root label of the query.
     popoto.start({
-            label: "SHIPPER"}    );
+            label: "SELLER"}    );
 
 </script>
 </body>
