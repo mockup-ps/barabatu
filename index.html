@@ -89,8 +89,8 @@
     // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
     popoto.provider.node.Provider = {
         "BUYER": {
-            "returnAttributes": ["name"],
-            "constraintAttribute": "name",
+            "returnAttributes": ["nama"],
+            "constraintAttribute": "nama",
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
@@ -99,8 +99,8 @@
             }            
         },
         "SELLER": {
-            "returnAttributes": ["name"],
-            "constraintAttribute": "name",
+            "returnAttributes": ["nama"],
+            "constraintAttribute": "nama",
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
