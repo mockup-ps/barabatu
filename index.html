@@ -3,11 +3,11 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <title>Relasi BaraBatu</title>
+    <title>Graph Results</title>
 
     <!-- Add Popoto default CSS styles -->
-    <link rel="stylesheet" href="popoto.min.css">
-    <link rel="stylesheet" href="vis-network.min.css">
+    <link rel="stylesheet" href="./node_modules/popoto/dist/popoto.min.css">
+    <link rel="stylesheet" href="./node_modules/vis/dist/vis-network.min.css">
     <style>
         #popoto-graph:fullscreen {
             width: 100%;
@@ -32,10 +32,13 @@
         .ppt-div-graph {
             height: 50%;
         }
+        .ppt-div-graph1 {
+            height: 100%;
+        }        
 
         .frame {
             height: 550px;
-            background-color: #F8F9FB;
+            /*background-color: #F8F9FB;*/
             position: relative;
             top: 0;
             opacity: 1;
@@ -45,30 +48,17 @@
     </style>
 </head>
 <body class="ppt-body">
-<div class="navbar-fixed">
-    <nav style="background-color: #444951;">
-        <div class="nav-wrapper">
-            <form style="height:100%; margin-left: 8%; margin-right: 8%; background-color: #525863;"
-                  onsubmit="event.preventDefault(); return false;">
-                <div class="input-field">
-                    <input id="search" type="search" required>
-                    <label class="label-icon" for="search"><i
-                            class="ppt-icon ppt-icon-search-plus" style="color:#8bb71a;"></i></label>
-                </div>
-            </form>
-        </div>
-    </nav>
-</div>
+
 <section class="ppt-section-main" style="height: 700px">
     <div class="ppt-section-header">
-        <span class="ppt-header-span">Relasi Batubara-</span>Mockup
+        <span class="ppt-header-span">Neo4j movie graph -</span> Graph Results example
     </div>
 
     <div id="popoto-graph" class="ppt-div-graph">
         <!-- Graph is generated here-->
     </div>
 
-    <div id="vis" class="ppt-div-graph" style="margin-top: 20px">
+    <div id="vis" class="ppt-div-graph1" style="margin-top: 20px">
         <!-- Results visualization will be generated here -->
     </div>
 
@@ -88,21 +78,42 @@
 </section>
 
 <!-- Required scripts -->
-<script src="jquery.min.js" charset="utf-8"></script>
-<script src="d3.min.js" charset="utf-8"></script>
-<script src="popoto.min.js" charset="utf-8"></script>
-<script src="vis-network.min.js" charset="utf-8"></script>
+<script src="./node_modules/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="./node_modules/d3/dist/d3.min.js" charset="utf-8"></script>
+<script src="./node_modules/popoto/dist/popoto.min.js" charset="utf-8"></script>
+<script src="./node_modules/vis/dist/vis-network.min.js" charset="utf-8"></script>
 <script>
 
     // Demo Neo4j database settings hosted on GrapheneDb
-    popoto.rest.CYPHER_URL = "http://3.85.41.208:32998/db/data/transaction/commit";
-    popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:specialty-rams-shaft");
+    popoto.rest.CYPHER_URL = "http://54.172.242.228:7474/db/data/transaction/commit";
+    popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:dispatch-establishment-spins");
 
     // Define the list of label provider to customize the graph behavior:
     // Only two labels are used in Neo4j movie graph example: "Movie" and "Person"
     popoto.provider.node.Provider = {
-        "BUYER": {
-            "returnAttributes": ["nama"],
+        "PERUSAHAAN": {
+            "returnAttributes": ["nama", "nib", "npwp", "kd_daerah", "idnib", "alamat", "id"],
+            "constraintAttribute": "idnib",
+            "displayResults": function (pResultElmt) {
+                pResultElmt.append("h3")
+                    .text(function (result) {
+                        return `Nama Perusahaan: ${result.attributes.nama}`
+                    });
+            }            
+        },
+        "PEMBELI_LN": {
+            "returnAttributes": ["nama", "alamat"],
+            "constraintAttribute": "nama",
+            // Customize result display for Person nodes:
+            "displayResults": function (pResultElmt) {
+                pResultElmt.append("h3")
+                    .text(function (result) {
+                        return result.attributes.nama;
+                    });
+            }
+        },
+        "PGJAWAB": {
+            "returnAttributes": ["nama", "noid", "jabatan", "alamat", "npwp", "id"],
             "constraintAttribute": "nama",
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
@@ -111,33 +122,29 @@
                     });
             }            
         },
-        "SELLER": {
-            "returnAttributes": ["nama"],
-            "constraintAttribute": "nama",
+        "ALAMAT": {
+            "returnAttributes": ["alamat"],
+            "constraintAttribute": "alamat",
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
-                        return result.attributes.nama;
+                        return result.attributes.alamat;
                     });
             }            
-        },        
-        "TRANSAKSI": {
-            "returnAttributes": ["ntpn"],
-            "constraintAttribute": "ntpn",
-            // Customize result display for Person nodes:
+        },
+        "NPWP": {
+            "returnAttributes": ["npwp"],
+            "constraintAttribute": "npwp",
             "displayResults": function (pResultElmt) {
                 pResultElmt.append("h3")
                     .text(function (result) {
-                        return result.attributes.ntpn;
+                        return result.attributes.npwp;
                     });
-            }
-        }       
+            }            
+        }                          
     };
 
-    // Change the number of displayed results:
-    popoto.query.RESULTS_PAGE_SIZE = 25;
-
-//     popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
+    // popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
 
     /**
      * Add a listener on result received to update map.
@@ -166,7 +173,7 @@
                     }
                 },
                 edges: {
-                    length: 200,
+                    length: 500,
                     font: {
                         align: 'top',
                         color: '#ffffff',
@@ -176,14 +183,14 @@
                     arrows: 'to'
                 },
                 groups: {
-                    "BUYER": {
+                    "SHIPPER": {
                         color: {background: '#68BDF6', border: '#5CA8DB'}
                     },
-                    "SELLER": {
+                    "NPWP": {
                         color: {background: '#FF756E', border: '#E06760'}
                     },
-                    "TRANSAKSI": {
-                        color: {background: '#03fcf4', border: '#E06760'}
+                    "CONSIGNEE": {
+                        color: {background: '#FF756E', border: '#E06760'}
                     }                    
                 }
             };
@@ -199,9 +206,11 @@
         nodes.forEach(function (node) {
             var nodeLabel = node.labels[0];
             var jos = "";
-            if (nodeLabel === "TRANSAKSI"){
-                jos = node.properties["ntpn"]
-            }  else {
+            if (nodeLabel === "ALAMAT"){
+                jos = node.properties["alamat"]
+            } else if (nodeLabel === "NPWP"){
+                jos = jos = node.properties["npwp"]
+            } else {
                 jos = jos = node.properties["nama"]
             }
             convertedNodes.push({
@@ -227,10 +236,10 @@
 
         return convertedEdges;
     }
-
+    popoto.query.RESULTS_PAGE_SIZE = 200;
     // Start the generation using parameter as root label of the query.
     popoto.start({
-            label: "SELLER"}    );
+            label: "PERUSAHAAN"}    );
 
 </script>
 </body>
